@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Página de Apuesta</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            height: 100vh;
+            background-color: #e0f7fa;
+            margin: 0;
+        }
+        h1 {
+            color: #00796b;
+        }
+        input {
+            padding: 10px;
+            font-size: 16px;
+            border: 2px solid #00796b;
+            border-radius: 5px;
+            width: 200px;
+            margin-bottom: 10px;
+        }
+        button {
+            padding: 10px 15px;
+            font-size: 16px;
+            border: none;
+            border-radius: 5px;
+            background-color: #00796b;
+            color: white;
+            cursor: pointer;
+            margin: 5px;
+            transition: background-color 0.3s;
+        }
+        button:hover {
+            background-color: #004d40;
+        }
+        #resultado {
+            margin-top: 20px;
+            font-size: 24px;
+            font-weight: bold;
+            color: #d32f2f;
+        }
+        #apuestas {
+            margin-top: 20px;
+            text-align: left;
+            color: #00796b;
+        }
+        .container {
+            text-align: center;
+            padding: 20px;
+            border: 2px solid #00796b;
+            border-radius: 10px;
+            background-color: #ffffff;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Página de Apuesta</h1>
+        <input type="number" id="numero" placeholder="Ingresa un número del 1 al 100" min="1" max="100">
+        <div>
+            <button onclick="agregarApuesta()">Agregar Apuesta</button>
+            <button onclick="iniciarJugada()">Iniciar Jugada</button>
+            <button onclick="activarRestriccion()"></button>
+            <button onclick="reiniciarApuestas()">Reiniciar Apuesta</button>
+        </div>
+        <div id="apuestas"></div>
+        <div id="resultado"></div>
+    </div>
+
+    <script>
+        const apuestas = new Set();
+        let restriccionActivada = false;
+
+        function agregarApuesta() {
+            const numero = document.getElementById('numero').value;
+            if (numero < 1 || numero > 100) {
+                alert("Por favor, ingresa un número entre 1 y 100.");
+                return;
+            }
+            apuestas.add(numero);
+            document.getElementById('numero').value = ''; // Limpiar el campo
+            mostrarApuestas();
+        }
+
+        function mostrarApuestas() {
+            const listaApuestas = document.getElementById('apuestas');
+            listaApuestas.innerHTML = '<h3>Apuestas:</h3>' + Array.from(apuestas).join(', ');
+        }
+
+        function iniciarJugada() {
+            if (apuestas.size === 0) {
+                alert("No hay apuestas para mostrar.");
+                return;
+            }
+
+            let numeroAleatorio;
+            do {
+                numeroAleatorio = Math.floor(Math.random() * 100) + 1;
+            } while (apuestas.has(numeroAleatorio)); // Asegura que el número no esté en las apuestas
+
+            document.getElementById('resultado').innerText = "Número aleatorio: " + numeroAleatorio;
+        }
+
+        function activarRestriccion() {
+            restriccionActivada = true;
+            alert("La restricción está activada. Se mostrará un número diferente a los apostados.");
+        }
+
+        function reiniciarApuestas() {
+            apuestas.clear();
+            document.getElementById('apuestas').innerHTML = '';
+            document.getElementById('resultado').innerText = '';
+            document.getElementById('numero').value = ''; // Limpiar el campo
+            restriccionActivada = false; // Reiniciar la restricción
+            alert("Apuestas reiniciadas.");
+        }
+    </script>
+</body>
+</html>
